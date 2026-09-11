@@ -32,6 +32,11 @@ async function generateDoc(audit) {
 
     var settings = await Settings.getAll();
     var preppedAudit = await prepAuditData(audit, settings)
+console.log("ORDER BEFORE DOCX:");
+preppedAudit.findings.forEach(f => {
+    console.log(f.identifier, f.title, f.cvss?.baseMetricScore);
+});
+
 
     var opts = {};
     // opts.centered = true;
@@ -88,7 +93,17 @@ async function generateDoc(audit) {
         modules: [imageModule],
     });
     try {
-        doc.render(preppedAudit);
+        
+console.log("FINAL TEMPLATE FINDINGS ORDER");
+preppedAudit.findings.forEach((f, i) => {
+    console.log(
+        i,
+        f.title,
+        f.cvss?.baseMetricScore
+    );
+});
+
+doc.render(preppedAudit);
     }
     catch (error) {
         if (error.properties.id === 'multi_error') {
